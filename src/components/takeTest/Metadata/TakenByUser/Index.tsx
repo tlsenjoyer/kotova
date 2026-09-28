@@ -3,8 +3,13 @@
 import Link from "next/link";
 import TakeTestMetadataCreatedByUserPopover from "./Popover";
 import useTakeTestContext from "@/lib/hooks/takeTest/context";
+import type getDatePopoverLabels from "@/lib/getDatePopoverLabels";
 
-export default function TakeTestMetadataCreatedByUser() {
+type Props = {
+  createdAtLabels: ReturnType<typeof getDatePopoverLabels>;
+};
+
+export default function TakeTestMetadataCreatedByUser({ createdAtLabels }: Props) {
   const test = useTakeTestContext();
   return (
     <div className="text-muted-foreground">
@@ -15,7 +20,7 @@ export default function TakeTestMetadataCreatedByUser() {
       >
         {test.createdBy?.name ?? "Удаленный пользователь"}
       </Link>{" "}
-      <TakeTestMetadataCreatedByUserPopover />
+      <TakeTestMetadataCreatedByUserPopover labels={createdAtLabels} />
     </div>
   );
 }

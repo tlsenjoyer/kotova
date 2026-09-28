@@ -3,6 +3,7 @@ import TestResultMetadata from "@/components/testResult/Metadata/Index";
 import TestResultContextProvider from "@/lib/contexts/testResult/Index/Provider";
 import getSignedInUser from "@/lib/fetchers/getSignedInUser";
 import getTestResult from "@/lib/fetchers/testResults/getTestResults";
+import getDatePopoverLabels from "@/lib/getDatePopoverLabels";
 import { notFound } from "next/navigation";
 
 type Context = {
@@ -18,10 +19,11 @@ export default async function TestResult(props: Context) {
 
   const testResult = await getTestResult(testResultId);
   if (!testResult) notFound();
+  const takenAtLabels = getDatePopoverLabels(testResult.createdAt);
 
   return (
     <TestResultContextProvider {...testResult} signedInUser={signedInUser}>
-      <TestResultMetadata />
+      <TestResultMetadata takenAtLabels={takenAtLabels} />
       <TestResultAnswers />
     </TestResultContextProvider>
   );

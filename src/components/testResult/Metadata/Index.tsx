@@ -2,8 +2,13 @@ import TestResultMetadataTitle from "./Title";
 import TestResultMetadataCategory from "./Category";
 import TestResultMetadataTakenByUser from "./TakenByUser/Index";
 import TestResultMetadataScore from "./Score";
+import type getDatePopoverLabels from "@/lib/getDatePopoverLabels";
 
-export default async function TestResultMetadata() {
+type Props = {
+  takenAtLabels: ReturnType<typeof getDatePopoverLabels>;
+};
+
+export default function TestResultMetadata({ takenAtLabels }: Props) {
   return (
     <div className="mb-8 space-y-2">
       <div className="space-y-2">
@@ -13,7 +18,7 @@ export default async function TestResultMetadata() {
         </div>
         <div>
           <TestResultMetadataScore />
-          <TestResultMetadataTakenByUser />
+          <TestResultMetadataTakenByUser takenAtLabels={takenAtLabels} />
         </div>
       </div>
     </div>

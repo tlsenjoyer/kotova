@@ -3,30 +3,27 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { dateFormatterDefaults, timeFormatterDefaults } from "@/lib/constants";
-import getRelativeDateString from "@/lib/getRelativeDateString";
+import getDatePopoverLabels from "@/lib/getDatePopoverLabels";
 import useTakeTestContext from "@/lib/hooks/takeTest/context";
+import { useEffect, useState } from "react";
 
-export default function TakeTestMetadataCreatedByUserPopover() {
-  const testResult = useTakeTestContext();
+type Props = {
+  labels: ReturnType<typeof getDatePopoverLabels>;
+};
 
-  const createdAtDateString = new Date(testResult.createdAt).toLocaleDateString(
-    "ru",
-    dateFormatterDefaults,
-  );
-  const createdAtTimeString = new Date(testResult.createdAt).toLocaleTimeString(
-    "ru",
-    timeFormatterDefaults,
-  );
-  const createdAtDateRelativeString = getRelativeDateString(
-    testResult.createdAt,
-  );
+export default function TakeTestMetadataCreatedByUserPopover({ labels }: Props) {
+  const { createdAt } = useTakeTestContext();
+  const [currentLabels, setCurrentLabels] = useState(labels);
+
+  useEffect(() => {
+    setCurrentLabels(getDatePopoverLabels(createdAt));
+  }, [createdAt]);
 
   return (
     <Popover>
-      <PopoverTrigger>{createdAtDateRelativeString}</PopoverTrigger>
+      <PopoverTrigger>{currentLabels.relative}</PopoverTrigger>
       <PopoverContent className="max-w-max">
-        {createdAtDateString} в {createdAtTimeString}
+        {currentLabels.absolute}
       </PopoverContent>
     </Popover>
   );

@@ -7,6 +7,7 @@ import TakeTestMetadataCreatedByUser from "@/components/takeTest/Metadata/TakenB
 import TakeTestContextProvider from "@/lib/contexts/takeTest/Index/Provider";
 import authOrRedirect from "@/lib/authOrRedirect";
 import TakeTestFiles from "@/components/takeTest/Files/Index";
+import getDatePopoverLabels from "@/lib/getDatePopoverLabels";
 
 type Context = {
   params: Promise<{ id: string }>;
@@ -21,6 +22,7 @@ export default async function TakeTest(props: Context) {
 
   const [test] = await Promise.all([takeTestGetTest(id), authOrRedirect()]);
   if (!test) notFound();
+  const createdAtLabels = getDatePopoverLabels(test.createdAt);
 
   return (
     <TakeTestContextProvider {...test}>
@@ -29,7 +31,7 @@ export default async function TakeTest(props: Context) {
           <TakeTestMetadataTitle />
           <TakeTestMetadataCategory />
         </div>
-        <TakeTestMetadataCreatedByUser />
+        <TakeTestMetadataCreatedByUser createdAtLabels={createdAtLabels} />
       </div>
       <TakeTestFiles />
       <TakeTestQuestions />
