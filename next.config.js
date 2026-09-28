@@ -1,10 +1,8 @@
-const withPwa = require("@ducanh2912/next-pwa").default({
+const withSerwist = require("@serwist/next").default({
   disable: process.env.NODE_ENV === "development",
-  dest: "public",
-  cacheOnFrontEndNav: true,
-  aggressiveFrontEndNavCaching: true,
-  cacheStartUrl: true,
-  dynamicStartUrl: true,
+  swSrc: "src/app/sw.ts",
+  swDest: "public/sw.js",
+  cacheOnNavigation: true,
   reloadOnOnline: true,
 });
 
@@ -51,4 +49,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withPwa(nextConfig);
+module.exports = withSerwist(nextConfig);

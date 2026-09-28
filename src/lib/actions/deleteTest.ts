@@ -6,7 +6,7 @@ import { db } from "../db";
 import ServerActionReturn from "../types/ServerActionReturn";
 import DeleteTestSchema from "../zod/schemas/deleteTest";
 import s3 from "../s3";
-import S3 from "aws-sdk/clients/s3";
+import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
 import getEnvVar from "../getEnvVar";
 
 export default async function deleteTestAction(
@@ -28,13 +28,13 @@ export default async function deleteTestAction(
       where: { id: testId },
       include: { files: true },
     });
-    const params: S3.DeleteObjectsRequest = {
+    const command = new DeleteObjectsCommand({
       Bucket: getEnvVar("S3_BUCKET_NAME"),
       Delete: {
         Objects: test.files.map((file) => ({ Key: file.key })),
       },
-    };
-    const filesDeletionResult = await s3.deleteObjects(params).promise();
+    });
+    const filesDeletionResult = await s3.send(command);
     console.log(filesDeletionResult);
 
     revalidatePath("/my/tests");

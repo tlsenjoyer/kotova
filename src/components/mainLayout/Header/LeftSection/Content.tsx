@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import MainLayoutHeaderLeftSectionBurgerMenu from "./BurgerMenu/Index";
 
 export type MainLayoutHeaderLeftSectionContentProps = {
-  shouldShowBackBtn: boolean;
   initPageLoadUrl: string;
   initPageLoadTimestamp: number;
 };
@@ -15,18 +14,16 @@ export type MainLayoutHeaderLeftSectionContentProps = {
 const TIMESTAMP_OFFSET = 1000;
 
 export default function MainLayoutHeaderLeftSectionContent({
-  shouldShowBackBtn,
   initPageLoadUrl,
   initPageLoadTimestamp,
 }: MainLayoutHeaderLeftSectionContentProps) {
   const pathname = usePathname();
   const isOnHomepage = useIsOnHomepage();
-  const [isInitLoad, setIsInitLoad] = useState(
-    getIsInitLoad(initPageLoadTimestamp),
-  );
+  const [isInitLoad, setIsInitLoad] = useState(true);
   const [pageLocation, setPageLocation] = useState<null | Location>(null);
   useEffect(() => {
     setPageLocation(location);
+    setIsInitLoad(getIsInitLoad(initPageLoadTimestamp));
   }, []);
 
   const [isOnSamePageAfterInitLoad, setIsOnSamePageAfterInitLoad] = useState(
@@ -51,17 +48,12 @@ export default function MainLayoutHeaderLeftSectionContent({
   }, [pathname]);
 
   // show back btn if on the same page after initial hard navigation
-  // and over 200ms has passed since that hard navigation
-  // (if 200ms hasn't passed it means the current page is where we ended up after a hard navigation)
-  if (
+  // and over 1000ms has passed since that hard navigation
+  // (if 1000ms hasn't passed it means the current page is where we ended up after a hard navigation)
+  const shouldShowBackBtn =
     !isOnHomepage &&
     !urlHasHideBackBtnParam &&
-    (!isOnSamePageAfterInitLoad || !isInitLoad)
-  ) {
-    shouldShowBackBtn = true;
-  } else {
-    shouldShowBackBtn = false;
-  }
+    (!isOnSamePageAfterInitLoad || !isInitLoad);
 
   return (
     <div className="flex items-center justify-start gap-3">

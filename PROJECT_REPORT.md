@@ -26,7 +26,7 @@ Versions below are declared in [package.json](package.json); a caret denotes a p
 | Forms | React Hook Form **^7.49.3**, Zod **^3.22.4** | Form state, field arrays, shared validation schemas |
 | Client data/state | SWR **^2.2.4**, Zustand **^4.4.7**, React Context | Fetching/filtering lists, small UI stores, per-feature context |
 | File storage | AWS SDK v2 **^2.1691.0**, S3-compatible endpoint | Uploads and signed download URLs |
-| Installable app support | `@ducanh2912/next-pwa` **^10.2.2** | Production service-worker configuration, manifest, icons, offline page |
+| Installable app support | `@serwist/next` **^9.5.12** | Production service-worker configuration, manifest, icons, offline page |
 | Monitoring | Vercel Analytics | Included in production by the root layout |
 | Development tools | ESLint 8, Prettier 3, `tsx` | Lint script, formatting dependencies, Prisma seed execution |
 

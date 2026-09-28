@@ -13,7 +13,7 @@ export default function MainLayoutHeaderSignInBtn({ url }: Props) {
   return (
     <Button
       onClick={() => signIn(undefined, { callbackUrl: urlObj.toString() })}
-      className="h-auto hover:underline"
+      className="h-8 py-0 hover:underline"
     >
       Войти
     </Button>

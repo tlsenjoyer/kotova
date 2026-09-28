@@ -1,5 +1,4 @@
 import { z } from "zod";
-import emailValidator from "email-validator";
 import { EMAIL_MAX_LEN, PHONE_MAX_LEN, PHONE_MIN_LEN } from "@/lib/constants";
 
 const NAME_MIN_LEN = 3;
@@ -23,9 +22,12 @@ const UserEditSchema = z.object({
       `Электронная почта должна быть не длиннее ${EMAIL_MAX_LEN} символов`,
     )
     .transform((data) => (!data ? null : data))
-    .refine((data) => (!data ? true : emailValidator.validate(data)), {
-      message: "Неверный формат электронной почты",
-    })
+    .refine(
+      (data) => (!data ? true : z.string().email().safeParse(data).success),
+      {
+        message: "Неверный формат электронной почты",
+      },
+    )
     .nullable(),
   phone: z
     .string()

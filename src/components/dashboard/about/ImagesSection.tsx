@@ -1,6 +1,6 @@
 "use client";
 
-import Zoom from "react-medium-image-zoom-fixed";
+import Zoom from "react-medium-image-zoom";
 import Image, { StaticImageData } from "next/image";
 
 type Props = {

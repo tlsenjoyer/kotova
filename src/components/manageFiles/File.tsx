@@ -15,7 +15,16 @@ import { useState } from "react";
 import deleteFileAction from "@/lib/actions/deleteFile";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 import BtnWithLoading from "../Btns/WithLoading";
+
+const FILE_IN_USE_MESSAGE =
+  "Файл невозможно удалить, потому что он используется в тестах";
 
 export type ManageFilesListFileProps = {
   filename: string;
@@ -128,23 +137,38 @@ export default function ManageFilesListFile({
             <KeyValue label="Используется в тестах">
               {tests.length
                 ? tests.map((test) => (
-                    <Link
-                      key={test.id}
-                      className="hover:text-primary hover:underline"
-                      href={`/my/tests/${test.id}`}
-                    >
-                      {test.name}
-                    </Link>
-                  ))
+                  <Link
+                    key={test.id}
+                    className="hover:text-primary hover:underline"
+                    href={`/my/tests/${test.id}`}
+                  >
+                    {test.name}
+                  </Link>
+                ))
                 : "Нет"}
               {}
             </KeyValue>
 
             <KeyValue label="Размер">{bytesToSize(byteLength)}</KeyValue>
           </ul>
-          <Button disabled={!!tests.length} onClick={() => deleteFile(fileKey)}>
-            Удалить файл
-          </Button>
+          {tests.length ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    aria-disabled="true"
+                    className="cursor-not-allowed opacity-50 hover:bg-primary"
+                    onClick={() => toast.error(FILE_IN_USE_MESSAGE)}
+                  >
+                    Удалить файл
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{FILE_IN_USE_MESSAGE}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : (
+            <Button onClick={() => deleteFile(fileKey)}>Удалить файл</Button>
+          )}
           {error && <p>{error}</p>}
         </CardContent>
       </Card>

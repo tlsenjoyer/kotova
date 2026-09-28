@@ -24,8 +24,10 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
   },
   metadataBase: new URL(
-    process.env.VERCEL_URL
-      ? "https://${process.env.VERCEL_URL}"
+    process.env.APP_URL
+      ? process.env.APP_URL
+      : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
       : `http://localhost:${process.env.PORT || 3000}`,
   ),
   openGraph: {
