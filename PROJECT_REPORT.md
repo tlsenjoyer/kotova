@@ -74,7 +74,7 @@ kotova/
 ├── next.config.js            PWA, remote images, SVG handling, action size limit
 ├── tailwind.config.ts        Theme configuration
 ├── package.json              Dependencies and scripts
-├── pnpm-lock.yml            Lockfile matching the current manifest
+├── pnpm-lock.yaml            Lockfile matching the current manifest
 └── package-lock.json         Older dependency snapshot
 ```
 

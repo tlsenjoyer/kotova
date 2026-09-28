@@ -10,9 +10,9 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-`pnpm-lock.yml` is the dependency lockfile. Build scripts required by Prisma,
+`pnpm-lock.yaml` is the dependency lockfile. Build scripts required by Prisma,
 bcrypt, esbuild, sharp, unrs-resolver, and Sass's file watcher are explicitly
-approved in `pnpm-workspace.yml`.
+approved in `pnpm-workspace.yaml`.
 Review any new build-script requests before approving them.
 
 The application uses Next.js 16, React 19, Prisma 5, and Tailwind CSS 3.

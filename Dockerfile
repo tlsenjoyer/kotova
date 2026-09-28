@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-cert
   && rm -rf /var/lib/apt/lists/* \
   && npm install -g pnpm@12.7.0
 
-COPY package.json pnpm-lock.yml pnpm-workspace.yml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 COPY . .
