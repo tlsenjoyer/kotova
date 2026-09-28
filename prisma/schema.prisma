@@ -1,0 +1,162 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String       @id @default(cuid())
+  role          Int
+  name          String?
+  email         String?      @unique
+  emailVerified DateTime?
+  phone         String?      @unique
+  image         String?
+  password      String?
+  createdAt     DateTime     @default(now())
+  avgTestScore  Float?
+  ips           Ip[]
+  sessions      Session[]
+  accounts      Account[]
+  createdTests  Test[]
+  testResults   TestResult[]
+  testFiles     TestFile[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Test {
+  id              String         @id @default(cuid())
+  name            String
+  questions       TestQuestion[]
+  testResults     TestResult[]
+  avgScore        Int? // average correct questions percentage (e.g. 80%)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  grades          Int[] // which grades (1st, 2nd, 12th, etc) this test is made for
+  createdBy       User?          @relation(fields: [createdByUserId], references: [id])
+  createdByUserId String?
+  category        Category?      @relation(fields: [categoryId], references: [id])
+  categoryId      String?
+  files           TestFile[]
+}
+
+model TestFile {
+  key             String    @id
+  filename        String
+  byteLength      Int
+  contentType     String
+  createdBy       User?     @relation(fields: [createdByUserId], references: [id], onDelete: SetNull)
+  createdByUserId String?
+  createdAt       DateTime? @default(now())
+  tests           Test[]
+}
+
+model TestQuestion {
+  id                String               @id @default(cuid())
+  test              Test                 @relation(fields: [testId], references: [id], onDelete: Cascade)
+  testId            String
+  // prisma doesn't yet support union types so we can't use something like `options (TextQuestion | RadioQuestion)[]`
+  question          String
+  type              Int
+  order             Int?                 @default(autoincrement())
+  options           TestQuestionOption[]
+  correctAnswerText String?
+  explanation       String?
+  testResultAnswer  TestResultAnswer[]
+}
+
+model TestQuestionOption {
+  id                      String                   @id @default(cuid())
+  content                 String?
+  isCorrect               Boolean?
+  tableColumn             String?
+  tableColumnAnswer       String?
+  testQuestion            TestQuestion             @relation(fields: [testQuestionId], references: [id], onDelete: Cascade)
+  testQuestionId          String
+  order                   Int?                     @default(autoincrement())
+  testResultAnswerOptions TestResultAnswerOption[]
+}
+
+model TestResult {
+  id        String             @id @default(cuid())
+  score     Float
+  answers   TestResultAnswer[]
+  createdAt DateTime           @default(now())
+  test      Test               @relation(fields: [testId], references: [id], onDelete: Cascade)
+  testId    String
+  user      User?              @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model TestResultAnswer {
+  id         String                   @id @default(cuid())
+  type       Int
+  textAnswer String?
+  options    TestResultAnswerOption[]
+  isCorrect  Boolean
+
+  question   TestQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId String
+
+  testResult   TestResult @relation(fields: [testResultId], references: [id], onDelete: Cascade)
+  testResultId String
+}
+
+model TestResultAnswerOption {
+  id                   String              @id @default(cuid())
+  tableAnswer          String?
+  isChecked            Boolean?
+  testResultAnswer     TestResultAnswer    @relation(fields: [testResultAnswerId], references: [id], onDelete: Cascade)
+  testResultAnswerId   String
+  testQuestionOption   TestQuestionOption? @relation(fields: [testQuestionOptionId], references: [id])
+  testQuestionOptionId String?
+}
+
+model Category {
+  id    String @id @default(cuid())
+  title String
+  tests Test[]
+}
+
+model Ip {
+  id     String @id @default(uuid())
+  ip     String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
