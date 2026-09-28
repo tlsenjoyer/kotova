@@ -75,7 +75,7 @@ export default function AllUsersList({ users }: Props) {
                     </Dialog.Title>
 
                     <div>
-                      <p>Изменить роль</p>
+                      <p className="mb-2">Изменить роль</p>
                       <div className="flex flex-wrap gap-1">
                         <Button
                           variant={

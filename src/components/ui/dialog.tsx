@@ -40,11 +40,10 @@ const DialogContent = React.forwardRef<
       <div ref={dialogWrapper} tabIndex={0}>
         <DialogPrimitive.Content
           onOpenAutoFocus={(e) => {
-            // focus on the modal window itself and not the first input field inside it.
-            // this prevents the cringe behavior on mobile where the keyboard doens't push
-            // the rest of the page up
+            // Focus the dialog wrapper without scrolling the page behind it or
+            // opening the mobile keyboard for the first input inside the dialog.
             e.preventDefault();
-            dialogWrapper.current?.focus();
+            dialogWrapper.current?.focus({ preventScroll: true });
           }}
           ref={ref}
           className={cn(

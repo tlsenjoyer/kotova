@@ -64,6 +64,12 @@
     @apply bg-background text-foreground;
   }
 
+  // The root scrollbar stays visible while Radix locks body scrolling.
+  // Its added body margin would otherwise shift the centered page content.
+  html body[data-scroll-locked] {
+    margin-right: 0 !important;
+  }
+
   a:hover {
 
     h1,
