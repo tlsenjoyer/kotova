@@ -43,25 +43,33 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Use a Linux VPS with Docker Engine, the Docker Compose plugin, a domain pointed at
 the server, and an HTTPS reverse proxy such as Caddy or Nginx. The production
-Compose file runs the app and PostgreSQL. It binds the app only to
-`127.0.0.1:3000`, leaving TLS and public HTTP to the reverse proxy. Configure
-the proxy to forward requests and the original host/protocol headers to that
-address. If port 3000 is in use, set `APP_PORT` in `.env.production` and use that
-port in the proxy too.
+Compose file runs the app, PostgreSQL, and SeaweedFS S3 storage. It binds the
+app to `127.0.0.1:3000` and SeaweedFS to `127.0.0.1:9000`, leaving TLS and
+public HTTP to the reverse proxy. If either port is in use, adjust the Compose
+port mapping and the corresponding proxy upstream.
 
-For example, after pointing DNS to the VPS, a Caddy site entry can be:
+Point both the app domain and a dedicated S3 subdomain at the VPS. For example,
+a host-installed Caddy can use:
 
 ```caddyfile
 example.com {
     reverse_proxy 127.0.0.1:3000
 }
+
+s3.example.com {
+    reverse_proxy 127.0.0.1:9000
+}
 ```
 
-Open ports 80 and 443 to visitors, and keep Postgres and the app port private.
+Open ports 80 and 443 to visitors. Keep PostgreSQL, the app port, and the
+SeaweedFS port private. Set `APP_URL` and `AUTH_URL` to `https://example.com`
+and `S3_ENDPOINT` to `https://s3.example.com` in `.env.production`.
 
-The app also requires a **persistent S3-compatible bucket**. Set `S3_ENDPOINT`
-to an HTTPS endpoint reachable by visitors' browsers: downloads use signed URLs
-containing that endpoint. Create the bucket and credentials before deployment.
+The deployment starts SeaweedFS with a persistent Docker volume and creates
+the bucket named by `S3_BUCKET_NAME`. Set strong `S3_ACCESS_KEY_ID` and
+`S3_SECRET_ACCESS_KEY` values. `S3_ENDPOINT` must use the public HTTPS name:
+downloads use signed URLs containing that endpoint. The app container must also
+be able to resolve and reach that name through Caddy for uploads.
 The existing `docker-compose.yml` is for local development and has example
 credentials; do not use it for production.
 
@@ -82,12 +90,14 @@ bash scripts/deploy.sh
 ```
 
 The deploy command fast-forwards the checked-out branch, builds a new image,
-starts PostgreSQL, applies pending Prisma migrations, and replaces the app
-container. A failed build or migration stops before replacing a running app.
+starts PostgreSQL and SeaweedFS, applies pending Prisma migrations, and
+replaces the app container. A failed build or migration stops before replacing
+a running app.
 The app may be briefly unavailable while its single container is replaced.
 Check `docker compose --env-file .env.production -f compose.production.yml ps`
-and `docker compose --env-file .env.production -f compose.production.yml logs -f app`
-after deployment. `GET /api/health` checks database connectivity.
+and `docker compose --env-file .env.production -f compose.production.yml logs -f app seaweedfs`
+after deployment. `GET /api/health` checks database connectivity, but does not
+check S3. Test an actual file upload and signed download after deploying.
 
 Recommended release workflow: finish and verify a change locally, commit it,
 push it to the branch checked out on the VPS (for example `main`), then SSH into
@@ -101,6 +111,8 @@ reverting a Git commit.
 Back up both the PostgreSQL volume and the S3 bucket before the first production
 deployment and regularly afterward. Test restoring them. In particular, take a
 database backup before deploying a migration that changes or removes data.
+Both volumes live on one VPS, so a server or disk failure can take out the app,
+database, and files together. Keep backups off the VPS and monitor free disk space.
 
 Before opening registration to the public, fix credential handling:
 `src/lib/credentialsSignUp/createUser.ts` currently stores passwords as plain

@@ -15,7 +15,7 @@ fi
 
 git pull --ff-only
 docker compose --env-file .env.production -f compose.production.yml build app
-docker compose --env-file .env.production -f compose.production.yml up -d --wait postgres
+docker compose --env-file .env.production -f compose.production.yml up -d --wait postgres seaweedfs
 docker compose --env-file .env.production -f compose.production.yml run --rm --no-deps app node_modules/.bin/prisma migrate deploy
 docker compose --env-file .env.production -f compose.production.yml up -d --wait --no-deps app
 docker compose --env-file .env.production -f compose.production.yml ps
