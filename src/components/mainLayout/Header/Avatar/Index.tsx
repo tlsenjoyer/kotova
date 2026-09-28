@@ -18,7 +18,7 @@ export default async function HeaderAvatar({ user }: Props) {
   const username = getUsername(user);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
         <AvatarWithFallback
           {...{

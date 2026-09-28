@@ -21,7 +21,7 @@ export default function AddTestFormQuestionActions() {
   }
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen} modal={false}>
       <DropdownMenuTrigger>
         <MoreVerticalIcon className="text-muted-foreground" />
       </DropdownMenuTrigger>

@@ -57,16 +57,23 @@
   }
 
   html {
-    overflow-y: scroll; // always show the scrollbar to prevent layout shift
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+  }
+
+  html:has(body[data-scroll-locked]) {
+    overflow-y: hidden;
   }
 
   body {
     @apply bg-background text-foreground;
   }
 
-  // The root scrollbar stays visible while Radix locks body scrolling.
-  // Its added body margin would otherwise shift the centered page content.
+  // Keep the root locked, but don't make body a scroll container: sticky
+  // navigation otherwise starts scrolling with body when a Radix modal opens.
+  // The stable root gutter handles the scrollbar width while the modal is open.
   html body[data-scroll-locked] {
+    overflow: visible !important;
     margin-right: 0 !important;
   }
 

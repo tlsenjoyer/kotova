@@ -88,9 +88,8 @@ export default function AddTestFormFiles() {
         });
       } else if (error?.message === errCodes.FILE_TOO_BIG) {
         setError("files", {
-          message: `Слишком большой файл. Максимальный размер ${
-            MAX_FILE_SIZE_BYTES / 1_000_000
-          } мегабайт`,
+          message: `Слишком большой файл. Максимальный размер ${MAX_FILE_SIZE_BYTES / 1_000_000
+            } мегабайт`,
         });
       } else {
         setError("files", { message: `Не удалось добавить файл` });
@@ -109,7 +108,7 @@ export default function AddTestFormFiles() {
         render={() => (
           <div>
             <h3 className="mb-2 text-xl font-semibold">Теория к тесту</h3>
-            <DropdownMenu>
+            <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">Выбрать файлы</Button>
               </DropdownMenuTrigger>
@@ -129,14 +128,6 @@ export default function AddTestFormFiles() {
                           ) as TestFile,
                         ]);
                       } else {
-                        console.log("unchecked:");
-                        console.log(file);
-                        const filtered = filesState.filter(
-                          (f) => f.key === file.key,
-                        );
-                        console.log("filtered:");
-                        console.log(filtered);
-
                         setValue(
                           "files",
                           filesState.filter((f) => f.key !== file.key),
@@ -149,7 +140,7 @@ export default function AddTestFormFiles() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            <br />
+            <div className="p-1" />
             <Button
               type="button"
               onClick={() => filesInputRef.current?.click()}
