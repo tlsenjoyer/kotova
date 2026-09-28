@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.scss";
 import { Toaster } from "@/components/ui/sonner";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import isProduction from "@/lib/isProduction";
 import IpLogger from "@/components/IpLogger";
@@ -67,12 +66,7 @@ export default async function RootLayout({
         <Toaster />
         <IpLogger />
 
-        {isProduction() && (
-          <>
-            <SpeedInsights />
-            <Analytics />
-          </>
-        )}
+        {isProduction() && <Analytics />}
 
         {children}
       </body>

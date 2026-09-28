@@ -13,7 +13,7 @@ pnpm dev
 `pnpm-lock.yaml` is the dependency lockfile. Build scripts required by Prisma,
 bcrypt, esbuild, sharp, unrs-resolver, and Sass's file watcher are explicitly
 approved in `pnpm-workspace.yaml`.
-The optional AWS SDK and Vercel Speed Insights postinstall notices are disabled.
+The optional AWS SDK postinstall notice is disabled.
 Review any new build-script requests before approving them.
 
 Dependency updates stay within each package's current major version, including
@@ -24,7 +24,7 @@ an authentication migration. React and its types use stable releases.
 `react-medium-image-zoom-fixed` still declares React 16–18 peer support; its
 latest release is unchanged, so pnpm reports this existing warning with React 19.
 
-Dependencies were checked against npm on September 28, 2026. All 78 direct
+Dependencies were checked against npm on September 28, 2026. All 77 direct
 dependencies use the newest release in their existing major version (NextAuth
 uses the v5 beta channel). The frozen-lockfile install, TypeScript check
 (`pnpm exec tsc --noEmit --incremental false`), and production build passed with

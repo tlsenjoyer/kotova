@@ -27,7 +27,7 @@ Versions below are declared in [package.json](package.json); a caret denotes a p
 | Client data/state | SWR **^2.2.4**, Zustand **^4.4.7**, React Context | Fetching/filtering lists, small UI stores, per-feature context |
 | File storage | AWS SDK v2 **^2.1691.0**, S3-compatible endpoint | Uploads and signed download URLs |
 | Installable app support | `@ducanh2912/next-pwa` **^10.2.2** | Production service-worker configuration, manifest, icons, offline page |
-| Monitoring | Vercel Analytics and Speed Insights | Included in production by the root layout |
+| Monitoring | Vercel Analytics | Included in production by the root layout |
 | Development tools | ESLint 8, Prettier 3, `tsx` | Lint script, formatting dependencies, Prisma seed execution |
 
 The active database is PostgreSQL: `@prisma/adapter-libsql` remains a dependency, but the application instantiates a normal PostgreSQL Prisma client. Google/Yandex OAuth providers are commented out. `bcrypt` is installed but unused in the authentication implementation. A commented S3 response suggests historical Backblaze B2 usage; the actual endpoint is supplied by environment variables. Vercel integrations suggest deployment intent, but the current host cannot be established from this checkout.

@@ -2,7 +2,7 @@
   "name": "kotova",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "build": "prisma generate && next build",
     "buildandstart": "next build && next start",
     "buildproduction": "prisma generate && prisma migrate deploy && next build",
@@ -38,7 +38,6 @@
     "@types/react-dom": "^19.3.0",
     "@uidotdev/usehooks": "^2.4.1",
     "@vercel/analytics": "^1.6.1",
-    "@vercel/speed-insights": "^1.3.1",
     "aws-sdk": "^2.1693.0",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.1",

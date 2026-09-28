@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: kotova-postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: kotova
+    volumes:
+      - kotova-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d kotova"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: kotova-pgadmin
+    ports:
+      - "127.0.0.1:5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@kotova.dev
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+    volumes:
+      - kotova-pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  seaweedfs:
+    image: chrislusf/seaweedfs:4.47@sha256:ce9e796f1fe6f06968f4c04bdaf8f678dad9c8acdfef3d244133d71bfa6bf882
+    container_name: kotova-seaweedfs
+    ports:
+      - "127.0.0.1:9000:8333"
+    environment:
+      AWS_ACCESS_KEY_ID: localadmin
+      AWS_SECRET_ACCESS_KEY: localpassword123
+      S3_BUCKET: kotova
+    volumes:
+      - kotova-seaweedfs-data:/data
+
+volumes:
+  kotova-postgres-data:
+  kotova-pgadmin-data:
+  kotova-seaweedfs-data:
