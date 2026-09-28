@@ -157,6 +157,6 @@ model Category {
 model Ip {
   id     String @id @default(uuid())
   ip     String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }
