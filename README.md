@@ -36,6 +36,10 @@ requires `DATABASE_URL`, `AUTH_SECRET`, `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`,
 `S3_SECRET_ACCESS_KEY`, and `S3_BUCKET_NAME` for its database, authentication,
 and file-storage features.
 
+For the local SeaweedFS service, set `S3_ENDPOINT=http://localhost:9000` and
+`S3_BUCKET_NAME=kotova`. The S3 client uses path-style requests so SeaweedFS
+receives object keys under the configured bucket.
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.

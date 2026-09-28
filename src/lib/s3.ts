@@ -8,6 +8,8 @@ import contentDisposition from "content-disposition";
 const s3 = new S3({
   signatureVersion: "v4",
   endpoint: getEnvVar("S3_ENDPOINT"),
+  // S3-compatible local endpoints may not resolve bucket subdomains correctly.
+  s3ForcePathStyle: true,
   credentials: {
     accessKeyId: getEnvVar("S3_ACCESS_KEY_ID"),
     secretAccessKey: getEnvVar("S3_SECRET_ACCESS_KEY"),
