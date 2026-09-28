@@ -1,0 +1,10 @@
+.git
+.next
+node_modules
+.env
+.env.*
+!.env.example
+*.dump
+*.tsbuildinfo
+PROJECT_REPORT.md
+README.md
