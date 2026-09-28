@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -21,26 +23,35 @@ import { GetUsersReturn } from "@/lib/fetchers/allUsers/getUsers";
 
 type Props = {
   users: GetUsersReturn;
+  signedInUserId: string;
 };
 
-export default function AllUsersList({ users }: Props) {
-  if (!users?.length) return <p>Нет пользователей</p>;
+export default function AllUsersList({ users, signedInUserId }: Props) {
+  const router = useRouter();
+  const [displayedUsers, setDisplayedUsers] = useState(users);
 
   async function handleChangeUserRole(userId: string, role: Role) {
     try {
       const { data, error } = await changeUserRoleAction({ userId, role });
       if (error || !data) throw new Error();
+      setDisplayedUsers((current) =>
+        current.map((user) =>
+          user.id === userId ? { ...user, role } : user,
+        ),
+      );
       toast.success("Роль успешно обновлена");
-      location.reload();
+      if (userId === signedInUserId && role !== ROLE.ADMIN) router.refresh();
     } catch (err) {
       toast.error("Не удалось обновить роль. Попробуйте еще раз позже");
       console.error(err);
     }
   }
 
+  if (!displayedUsers?.length) return <p>Нет пользователей</p>;
+
   return (
     <ul className="space-y-2">
-      {users.map((user) => (
+      {displayedUsers.map((user) => (
         <li key={user.id}>
           <Card>
             <CardHeader>

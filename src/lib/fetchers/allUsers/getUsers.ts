@@ -9,6 +9,7 @@ type Params = {
 
 const getUsers = cache(({ query }: Params) => {
   return db.user.findMany({
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
     where: {
       name: {
         contains: query,

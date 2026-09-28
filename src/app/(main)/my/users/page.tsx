@@ -14,7 +14,7 @@ export default async function AllUsers() {
     <>
       <PageTitle className="mb-6">Пользователи</PageTitle>
       <div className="space-y-6">
-        <AllUsersList users={users} />
+        <AllUsersList users={users} signedInUserId={signedInUser.id} />
       </div>
     </>
   );
