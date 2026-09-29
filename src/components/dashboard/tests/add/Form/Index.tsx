@@ -57,8 +57,6 @@ export default function AddTestForm({ categories, existingFiles }: Props) {
   });
   usePersistAddTestForm(form);
   const { isLoading, setIsLoading } = useLoading();
-  console.log(form.getValues());
-
   const handleSubmit = useCallback(async (formData: AddTestFormSchemaType) => {
     setIsLoading(true);
     const { data, error } = await createTestAction(formData);

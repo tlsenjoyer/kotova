@@ -48,8 +48,6 @@ export default function TakeTestQuestions() {
     );
     console.error(err);
   }
-  console.log(questions);
-
   return (
     <>
       <FormProvider {...form}>

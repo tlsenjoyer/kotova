@@ -26,9 +26,8 @@ export default function ManageFilesAddFile() {
       const { data: uploadedFile, error } = await uploadFileAction(formData);
       if (error || !uploadedFile) throw new Error("upload failed");
       router.refresh();
-    } catch (error: any) {
+    } catch {
       setError(`Не удалось добавить файл`);
-      console.log(error);
     }
     setIsSendingFiles(false);
   }

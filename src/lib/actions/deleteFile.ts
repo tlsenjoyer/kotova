@@ -13,7 +13,6 @@ const InputDataSchema = z.object({
 export default async function deleteFileAction(
   data: unknown,
 ): Promise<ServerActionReturn<any>> {
-  console.log(data);
   const session = await auth();
   const validationResult = InputDataSchema.safeParse(data);
   if (!validationResult.success || !session?.user) {
@@ -26,11 +25,8 @@ export default async function deleteFileAction(
     const deletionResult = await db.testFile.delete({
       where: { key: validatedData.fileKey, createdByUserId: session?.user?.id },
     });
-    console.log(deletionResult);
-
     return { data: deletionResult };
-  } catch (error) {
-    console.log(error);
+  } catch {
     return { error: true };
   }
 }

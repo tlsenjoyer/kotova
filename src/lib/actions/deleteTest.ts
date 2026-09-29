@@ -12,8 +12,6 @@ import getEnvVar from "../getEnvVar";
 export default async function deleteTestAction(
   data: unknown,
 ): Promise<ServerActionReturn<true, string | boolean>> {
-  console.log("delete test");
-
   const session = await auth();
   if (!session?.user?.id) return { error: "no credentials provided" };
 
@@ -34,13 +32,11 @@ export default async function deleteTestAction(
         Objects: test.files.map((file) => ({ Key: file.key })),
       },
     });
-    const filesDeletionResult = await s3.send(command);
-    console.log(filesDeletionResult);
+    await s3.send(command);
 
     revalidatePath("/my/tests");
     return { data: true };
-  } catch (err) {
-    console.log(err);
+  } catch {
     return { error: true };
   }
 }

@@ -94,8 +94,6 @@ export default function AddTestFormFiles() {
       } else {
         setError("files", { message: `Не удалось добавить файл` });
       }
-      console.log("file error");
-      console.log(error);
     }
     setIsSendingFiles(false);
   }

@@ -14,11 +14,8 @@ export default async function uploadFileAction(
   data: unknown,
 ): Promise<ServerActionReturn<UploadedFileSchemaType, string | true>> {
   try {
-    console.log("uploadFileAction");
     const session = await auth();
     const validationResult = FormDataSchema.safeParse(data);
-    console.log("validationResult:");
-    console.log(validationResult);
 
     if (!validationResult.success || !session?.user) {
       throw new Error("invalid input data");
@@ -26,8 +23,6 @@ export default async function uploadFileAction(
     const { data: formData } = validationResult;
 
     const formDataFile = formData.get("file");
-    console.log(formDataFile);
-
     const fileValidationResult = z.instanceof(File).safeParse(formDataFile);
     if (!fileValidationResult.success) {
       throw new Error("invalid form data");
@@ -55,7 +50,6 @@ export default async function uploadFileAction(
 
     return { data: upload };
   } catch (err) {
-    console.log(err);
     return { error: JSON.stringify(err) };
   }
 }

@@ -15,7 +15,7 @@ const db = new PrismaClient();
     },
   });
 
-  const test1 = await db.test.upsert({
+  await db.test.upsert({
     where: { id: "1" },
     update: {},
     create: {
@@ -180,5 +180,4 @@ const db = new PrismaClient();
       },
     },
   });
-  console.log(test1);
 })();
