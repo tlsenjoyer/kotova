@@ -3,10 +3,29 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 
 Use Node.js 20.19 or newer and pnpm 12.7.0 (pinned in `package.json`).
-Install dependencies, then run the development server:
+Install dependencies and start the local services:
 
 ```bash
 pnpm install --frozen-lockfile
+docker compose up -d
+```
+
+When running `pnpm dev` on the host, copy `.env.example` to `.env.local` and
+set `DATABASE_URL` to `postgresql://user:password@127.0.0.1:5432/kotova?schema=public`.
+The `postgres` hostname in `.env.production.example` works only inside the
+production Compose network. The local Compose database uses the `user` and
+`password` credentials shown above. If you also use the local SeaweedFS service,
+set `S3_ENDPOINT=http://127.0.0.1:9000`, `AWS_ACCESS_KEY_ID=localadmin`,
+`AWS_SECRET_ACCESS_KEY=localpassword123`, and `S3_BUCKET_NAME=kotova` in
+`.env.local`. Create a unique `AUTH_SECRET` for local development as described
+in `.env.example`.
+
+Apply database migrations before opening the home page. Prisma CLI reads
+`.env`, so pass the local database URL explicitly if `.env` targets another
+database:
+
+```bash
+DATABASE_URL='postgresql://user:password@127.0.0.1:5432/kotova?schema=public' pnpm exec prisma migrate deploy
 pnpm dev
 ```
 
@@ -27,8 +46,8 @@ S3 operations passed a local endpoint smoke test; database and live storage
 flows require separate integration testing.
 
 Run `pnpm build` to generate Prisma Client and build the application. The app
-requires `DATABASE_URL`, `AUTH_SECRET`, `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`,
-`S3_SECRET_ACCESS_KEY`, and `S3_BUCKET_NAME` for its database, authentication,
+requires `DATABASE_URL`, `AUTH_SECRET`, `S3_ENDPOINT`, `AWS_ACCESS_KEY_ID`,
+`AWS_SECRET_ACCESS_KEY`, and `S3_BUCKET_NAME` for its database, authentication,
 and file-storage features. Set `S3_REGION` to the storage provider's region
 (for example, `us-west-002` for Backblaze B2); it defaults to `us-east-1` for
 local S3-compatible storage.
@@ -66,8 +85,8 @@ SeaweedFS port private. Set `APP_URL` and `AUTH_URL` to `https://example.com`
 and `S3_ENDPOINT` to `https://s3.example.com` in `.env.production`.
 
 The deployment starts SeaweedFS with a persistent Docker volume and creates
-the bucket named by `S3_BUCKET_NAME`. Set strong `S3_ACCESS_KEY_ID` and
-`S3_SECRET_ACCESS_KEY` values. `S3_ENDPOINT` must use the public HTTPS name:
+the bucket named by `S3_BUCKET_NAME`. Set strong `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY` values. `S3_ENDPOINT` must use the public HTTPS name:
 downloads use signed URLs containing that endpoint. The app container must also
 be able to resolve and reach that name through Caddy for uploads.
 The existing `docker-compose.yml` is for local development and has example

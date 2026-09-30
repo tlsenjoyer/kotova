@@ -23,8 +23,8 @@ const s3 = new S3Client({
   // Keep optional checksums off for S3-compatible providers that predate SDK v3 defaults.
   requestChecksumCalculation: "WHEN_REQUIRED",
   credentials: {
-    accessKeyId: getEnvVar("S3_ACCESS_KEY_ID"),
-    secretAccessKey: getEnvVar("S3_SECRET_ACCESS_KEY"),
+    accessKeyId: getEnvVar("AWS_ACCESS_KEY_ID"),
+    secretAccessKey: getEnvVar("AWS_SECRET_ACCESS_KEY"),
   },
 });
 

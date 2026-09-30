@@ -36,8 +36,8 @@ services:
     ports:
       - "127.0.0.1:9000:8333"
     environment:
-      AWS_ACCESS_KEY_ID: localadmin
-      AWS_SECRET_ACCESS_KEY: localpassword123
+      AWS_ACCESS_KEY_ID: admin
+      AWS_SECRET_ACCESS_KEY: qwerty1234
       S3_BUCKET: kotova
     volumes:
       - kotova-seaweedfs-data:/data

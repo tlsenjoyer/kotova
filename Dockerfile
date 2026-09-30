@@ -17,8 +17,8 @@ ENV APP_URL=${APP_URL} \
   DATABASE_URL=postgresql://build:build@localhost:5432/build \
   AUTH_SECRET=build-only-placeholder \
   S3_ENDPOINT=https://example.invalid \
-  S3_ACCESS_KEY_ID=build-only-placeholder \
-  S3_SECRET_ACCESS_KEY=build-only-placeholder \
+  AWS_ACCESS_KEY_ID=build-only-placeholder \
+  AWS_SECRET_ACCESS_KEY=build-only-placeholder \
   S3_BUCKET_NAME=build-only-placeholder
 RUN pnpm build
 
