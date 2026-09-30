@@ -119,7 +119,7 @@ after deployment. `GET /api/health` checks database connectivity, but does not
 check S3. Test an actual file upload and signed download after deploying.
 
 Recommended release workflow: finish and verify a change locally, commit it,
-push it to the branch checked out on the VPS (for example `main`), then SSH into
+push it to the branch checked out on the VPS (for example `master`), then SSH into
 the VPS and run `bash scripts/deploy.sh`. A Git tag is optional for marking a
 release; every pushed commit can be deployed this way. Avoid running the script
 from a checkout containing local code changes. For a rollback, restore a known
