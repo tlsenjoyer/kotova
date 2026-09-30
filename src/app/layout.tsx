@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.scss";
 import { Toaster } from "@/components/ui/sonner";
-import { Analytics } from "@vercel/analytics/react";
-import isProduction from "@/lib/isProduction";
 import IpLogger from "@/components/IpLogger";
 
 const APP_NAME = "Kotova";
@@ -26,8 +24,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.APP_URL
       ? process.env.APP_URL
-      : process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
       : `http://localhost:${process.env.PORT || 3000}`,
   ),
   openGraph: {
@@ -67,9 +63,6 @@ export default async function RootLayout({
       <body>
         <Toaster />
         <IpLogger />
-
-        {isProduction() && <Analytics />}
-
         {children}
       </body>
     </html>
